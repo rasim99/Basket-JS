@@ -1,6 +1,7 @@
 let table = document.querySelector(".table");
 let totalP = document.getElementById("p");
 let totalPriceDiv = document.querySelector(".total-price");
+let basketCount = document.getElementById("countbasket");
 
 if (localStorage.getItem("basket") != null) {
   let basketArr = JSON.parse(localStorage.getItem("basket"))
@@ -29,9 +30,9 @@ if (localStorage.getItem("basket") != null) {
 
         `
     table.lastElementChild.innerHTML += tr;
-    
+
   });
-    
+
   TotalPrice(basketArr)
   Plus(basketArr)
   Minus(basketArr)
@@ -48,90 +49,87 @@ function TotalPrice(basketArr) {
 }
 
 
- let removeIcon = document.querySelectorAll(".fa-trash");
-removeIcon.forEach(r=>{
-  r.addEventListener("click",function () {
-    let data=JSON.parse(localStorage.getItem("basket"));
-    let id=r.parentNode.parentNode.firstElementChild.getAttribute("data-id");
-    let existData=data.find(f=>f.id==id);
-    let dataIndex=data.indexOf(existData);
-    data.splice(dataIndex,1);
-    localStorage.setItem("basket",JSON.stringify(data))
-    if (data<1) {
+let removeIcon = document.querySelectorAll(".fa-trash");
+removeIcon.forEach(r => {
+  r.addEventListener("click", function () {
+    let data = JSON.parse(localStorage.getItem("basket"));
+    let id = r.parentNode.parentNode.firstElementChild.getAttribute("data-id");
+    let existData = data.find(f => f.id == id);
+    let dataIndex = data.indexOf(existData);
+    data.splice(dataIndex, 1);
+    localStorage.setItem("basket", JSON.stringify(data))
+    if (data < 1) {
       localStorage.removeItem("basket")
+      table.remove();
+      totalPriceDiv.remove();
+      basketCount.innerText = "0"
     }
-    TotalPrice(data)
+    this.parentNode.parentNode.remove();
+    TotalPrice(data);
+    CaculateCount();
   })
 })
 
 
-//  function Delete(basketArr) {
-//   let removeIcon = document.querySelectorAll(".fa-trash");
-//   removeIcon.forEach(r=>{
-//     r.addEventListener("click",function () {
-//       let data=JSON.parse(localStorage.getItem("basket"));
-//       let id=r.parentNode.parentNode.firstElementChild.getAttribute("data-id");
-//       let existData=data.find(f=>f.id==id);
-//       let dataIndex=data.indexOf(existData);
-//       data.splice(dataIndex,1);
-//       localStorage.setItem("basket",JSON.stringify(data))
-//       if (data<1) {
-//         localStorage.removeItem("basket")
-//       }
-//       TotalPrice(data)
-      
-//     })
-//   })
-//  }
+function CaculateCount() {
+  if (localStorage.getItem("basket") != null) {
+    let arr = JSON.parse(localStorage.getItem("basket"));
+    basketCount.innerText = arr.length
+
+  }
+}
+
+CaculateCount();
+
 
 function Plus(basketArr) {
-  let items=JSON.parse(localStorage.getItem("basket"));
-  let plusItem=document.querySelectorAll(".fa-plus")
-plusItem.forEach(plus=>{
-  plus.addEventListener("click",function () {
-    
-    let id=this.parentNode.parentNode.firstElementChild.getAttribute("data-id");
-    let existitem=items.find(i=>i.id==id);
+  let items = JSON.parse(localStorage.getItem("basket"));
+  let plusItem = document.querySelectorAll(".fa-plus")
+  plusItem.forEach(plus => {
+    plus.addEventListener("click", function () {
 
-     let itemCount=existitem.count
+      let id = this.parentNode.parentNode.firstElementChild.getAttribute("data-id");
+      let existitem = items.find(i => i.id == id);
+
+      let itemCount = existitem.count
       itemCount++
-    existitem.count=itemCount
-   
-    plus.parentNode.previousElementSibling.innerText=existitem.count
-TotalPrice(items)
+      existitem.count = itemCount
 
+      plus.parentNode.previousElementSibling.innerText = existitem.count
+      TotalPrice(items)
+
+    })
   })
-})
 }
 
 
 function Minus(basketArr) {
-  let items=JSON.parse(localStorage.getItem("basket"));
-  let MinusItem=document.querySelectorAll(".fa-minus")
-   MinusItem.forEach(minus=>{
-  minus.addEventListener("click",function () {
-    
-    let id=this.parentNode.parentNode.firstElementChild.getAttribute("data-id");
-    let existitem=items.find(i=>i.id==id);
-   
-    let itemCount=existitem.count
-   if (itemCount>0) {
-    
-    itemCount--
-  existitem.count=itemCount
+  let items = JSON.parse(localStorage.getItem("basket"));
+  let MinusItem = document.querySelectorAll(".fa-minus")
+  MinusItem.forEach(minus => {
+    minus.addEventListener("click", function () {
 
-  minus.parentNode.nextElementSibling.innerText=existitem.count
+      let id = this.parentNode.parentNode.firstElementChild.getAttribute("data-id");
+      let existitem = items.find(i => i.id == id);
 
-   }
-    else{
-      alert("Basket Is Empty")
-    }
-    
-  TotalPrice(items)
- 
+      let itemCount = existitem.count
+      if (itemCount > 0) {
+
+        itemCount--
+        existitem.count = itemCount
+
+        minus.parentNode.nextElementSibling.innerText = existitem.count
+
+      }
+      else {
+        alert("Basket Is Empty")
+      }
+
+      TotalPrice(items)
+
+    })
+
+
   })
-
-
-})
 }
 
