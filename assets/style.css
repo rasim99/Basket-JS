@@ -1,0 +1,23 @@
+.fa-plus{
+    cursor: zoom-in;
+    color: green;
+    position: relative;
+    right: 150px;
+}
+.fa-plus:hover{
+    font-size: 10px;
+}
+.fa-trash{
+    color: red;
+    position: relative;
+    font-size: 29px;
+    right: 150px; 
+}
+.fa-minus{
+    cursor: zoom-out;
+    color:cyan;
+   
+}
+.fa-minus:hover{
+    font-size: 10px;
+}
